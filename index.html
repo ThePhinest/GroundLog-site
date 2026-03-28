@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GroundLog — AI-powered. Boots required.</title>
+  <meta name="description" content="GroundLog is the field compliance platform built for environmental inspectors. AI-powered reporting, built from the ground up." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #006B75;
+      --green-light: #00929f;
+      --green-glow: rgba(0, 107, 117, 0.18);
+      --amber: #C9A84C;
+      --bg: #0a0c0c;
+      --bg-2: #0f1313;
+      --surface: #131818;
+      --text: #e8eded;
+      --text-muted: #7a9090;
+      --border: rgba(0, 107, 117, 0.2);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Oswald', sans-serif;
+      overflow: hidden;
+    }
+
+    /* === TOPO TEXTURE BACKGROUND === */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-canvas svg {
+      width: 100%;
+      height: 100%;
+      opacity: 0.045;
+    }
+
+    /* Radial glow center */
+    .bg-glow {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(ellipse 70% 60% at 50% 52%, rgba(0,107,117,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Horizontal scan line */
+    .scan-line {
+      position: fixed;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      opacity: 0;
+      z-index: 2;
+      animation: scan 8s ease-in-out infinite;
+    }
+    @keyframes scan {
+      0%   { top: -2%; opacity: 0; }
+      5%   { opacity: 0.4; }
+      95%  { opacity: 0.15; }
+      100% { top: 102%; opacity: 0; }
+    }
+
+    /* === LAYOUT === */
+    .page {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      gap: 0;
+    }
+
+    /* === BADGE === */
+    .badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      padding: 0.35rem 0.9rem;
+      border-radius: 2px;
+      margin-bottom: 2.8rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    /* === WORDMARK === */
+    .wordmark {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.5s;
+    }
+
+    .wordmark-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      line-height: 1;
+    }
+
+    .wordmark-ground {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300;
+      font-size: clamp(3.2rem, 10vw, 6.8rem);
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .wordmark-bar {
+      width: 3px;
+      height: clamp(2.8rem, 8vw, 5.6rem);
+      background: var(--amber);
+      margin: 0 clamp(0.6rem, 1.5vw, 1.1rem);
+      flex-shrink: 0;
+    }
+
+    .wordmark-log {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.2rem, 10vw, 6.8rem);
+      letter-spacing: 0.04em;
+      color: var(--green);
+      text-transform: uppercase;
+      text-shadow: 0 0 60px rgba(0, 107, 117, 0.45);
+    }
+
+    .wordmark-io {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 400;
+      font-size: clamp(0.9rem, 2.2vw, 1.5rem);
+      color: var(--text-muted);
+      align-self: flex-end;
+      margin-bottom: 0.6rem;
+      margin-left: 0.2rem;
+    }
+
+    .wordmark-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 400;
+      font-size: clamp(0.55rem, 1.1vw, 0.72rem);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-top: 0.4rem;
+      padding-left: 0.1rem;
+    }
+
+    /* === RULE === */
+    .rule {
+      width: clamp(200px, 40vw, 480px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 0.9s;
+    }
+
+    /* === TAGLINE === */
+    .tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.1rem, 3.2vw, 1.9rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 2.4rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1s;
+    }
+
+    .tagline span {
+      color: var(--text);
+    }
+
+    /* === DESCRIPTION === */
+    .description {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+      line-height: 1.75;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 520px;
+      letter-spacing: 0.02em;
+      margin-bottom: 3.2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1.2s;
+    }
+
+    .description strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* === FOOTER LINE === */
+    .footer {
+      position: fixed;
+      bottom: 2rem;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 1.6s;
+    }
+
+    .footer-item {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #3a5050;
+    }
+
+    .footer-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--green);
+      opacity: 0.5;
+    }
+
+    /* === CORNER ACCENTS === */
+    .corner {
+      position: fixed;
+      width: 32px;
+      height: 32px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.8s;
+    }
+    .corner-tl { top: 1.5rem; left: 1.5rem; border-top: 1px solid var(--green); border-left: 1px solid var(--green); }
+    .corner-tr { top: 1.5rem; right: 1.5rem; border-top: 1px solid var(--green); border-right: 1px solid var(--green); }
+    .corner-bl { bottom: 1.5rem; left: 1.5rem; border-bottom: 1px solid var(--green); border-left: 1px solid var(--green); }
+    .corner-br { bottom: 1.5rem; right: 1.5rem; border-bottom: 1px solid var(--green); border-right: 1px solid var(--green); }
+
+    /* === ANIMATIONS === */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* === MOBILE === */
+    @media (max-width: 480px) {
+      html, body { overflow: auto; }
+      .page { justify-content: center; padding: 3rem 1.5rem; min-height: 100vh; height: auto; }
+      .corner { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topographic background -->
+  <div class="bg-canvas">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="blur"><feGaussianBlur stdDeviation="0.8"/></filter>
+      </defs>
+      <g fill="none" stroke="#006B75" stroke-width="0.8" filter="url(#blur)">
+        <!-- Topo contour lines -->
+        <ellipse cx="720" cy="450" rx="80" ry="50"/>
+        <ellipse cx="720" cy="450" rx="160" ry="100"/>
+        <ellipse cx="720" cy="450" rx="240" ry="155"/>
+        <ellipse cx="720" cy="450" rx="330" ry="215"/>
+        <ellipse cx="720" cy="450" rx="430" ry="280"/>
+        <ellipse cx="720" cy="450" rx="540" ry="355"/>
+        <ellipse cx="720" cy="450" rx="660" ry="440"/>
+        <ellipse cx="720" cy="450" rx="790" ry="530"/>
+        <ellipse cx="720" cy="450" rx="940" ry="625"/>
+        <ellipse cx="720" cy="450" rx="1110" ry="730"/>
+        <ellipse cx="720" cy="450" rx="1310" ry="850"/>
+        <!-- Off-center secondary cluster -->
+        <ellipse cx="200" cy="150" rx="60" ry="40"/>
+        <ellipse cx="200" cy="150" rx="130" ry="85"/>
+        <ellipse cx="200" cy="150" rx="210" ry="140"/>
+        <ellipse cx="1280" cy="750" rx="70" ry="45"/>
+        <ellipse cx="1280" cy="750" rx="150" ry="95"/>
+        <ellipse cx="1280" cy="750" rx="240" ry="155"/>
+        <!-- Grid overlay -->
+        <line x1="0" y1="225" x2="1440" y2="225"/>
+        <line x1="0" y1="450" x2="1440" y2="450"/>
+        <line x1="0" y1="675" x2="1440" y2="675"/>
+        <line x1="360" y1="0" x2="360" y2="900"/>
+        <line x1="720" y1="0" x2="720" y2="900"/>
+        <line x1="1080" y1="0" x2="1080" y2="900"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="bg-glow"></div>
+  <div class="scan-line"></div>
+
+  <!-- Corner accents -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Main content -->
+  <div class="page">
+
+    <div class="badge">In Development</div>
+
+    <div class="wordmark">
+      <div class="wordmark-row">
+        <span class="wordmark-ground">Ground</span>
+        <div class="wordmark-bar"></div>
+        <span class="wordmark-log">Log</span>
+        <span class="wordmark-io">.io</span>
+      </div>
+      <div class="wordmark-sub">Field Compliance Platform</div>
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="tagline"><span>AI-powered.</span> Boots required.</div>
+
+    <p class="description">
+      GroundLog is a <strong>field compliance platform</strong> built for <strong>project compliance</strong> — from daily logs and regulatory checklists to <strong>AI-generated reports</strong>, synced from the field to the office in real time.
+    </p>
+
+  </div>
+
+  <div class="footer">
+    <span class="footer-item">groundlog.io</span>
+    <div class="footer-dot"></div>
+    <span class="footer-item">Field &rarr; Office &rarr; Record</span>
+    <div class="footer-dot"></div>
+    <span class="footer-item">&copy; 2026</span>
+  </div>
+
+</body>
+</html>
