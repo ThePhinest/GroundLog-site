@@ -209,6 +209,41 @@
       animation: fadeUp 0.7s ease forwards 1.2s;
     }
 
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.9rem;
+      margin-top: -1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1.5s;
+    }
+
+    .cta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.8rem 1.3rem;
+      border-radius: 2px;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+
+    .cta:hover, .cta:focus-visible { border-color: var(--green-light); color: #fff; }
+
+    .cta-primary { color: #121212; background: var(--amber); border-color: var(--amber); }
+
+    .cta-primary:hover, .cta-primary:focus-visible { background: #d8b95f; border-color: #d8b95f; color: #121212; }
+
+    a.footer-item { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; }
+
+    a.footer-item:hover, a.footer-item:focus-visible { color: var(--green-light); }
+
     .description strong {
       color: var(--text);
       font-weight: 500;
@@ -219,6 +254,7 @@
       position: fixed;
       bottom: 2rem;
       left: 0; right: 0;
+      z-index: 10;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -268,9 +304,16 @@
 
     /* === MOBILE === */
     @media (max-width: 480px) {
-      html, body { overflow: auto; }
-      .page { justify-content: center; padding: 3rem 1.5rem; min-height: 100vh; height: auto; }
+      html, body { height: auto; min-height: 100%; overflow: auto; }
+      .page { justify-content: center; padding: 3rem 1.5rem 1.5rem; min-height: calc(100vh - 6rem); height: auto; }
       .corner { display: none; }
+      .footer { position: relative; z-index: 10; bottom: auto; flex-wrap: wrap; gap: 0.8rem 1rem; padding: 0 1.5rem 2rem; }
+    }
+
+    @media (max-height: 720px) and (min-width: 481px) {
+      html, body { height: auto; min-height: 100%; overflow: auto; }
+      .page { height: auto; min-height: calc(100vh - 5rem); }
+      .footer { position: relative; z-index: 10; bottom: auto; padding-bottom: 2rem; }
     }
   </style>
 </head>
@@ -325,7 +368,7 @@
   <!-- Main content -->
   <div class="page">
 
-    <div class="badge">In Development</div>
+    <div class="badge">Now on the App Store</div>
 
     <div class="wordmark">
       <div class="wordmark-row">
@@ -345,6 +388,11 @@
       GroundLog is a <strong>field compliance platform</strong> built for <strong>project compliance</strong> — from daily logs and regulatory checklists to <strong>AI-generated reports</strong>, synced from the field to the office in real time.
     </p>
 
+    <div class="cta-row">
+      <a class="cta cta-primary" href="https://apps.apple.com/us/app/id6766680599">Download for iPhone and iPad</a>
+      <a class="cta" href="https://app.groundlog.io">Open the web app</a>
+    </div>
+
   </div>
 
   <div class="footer">
@@ -353,6 +401,12 @@
     <span class="footer-item">Field &rarr; Office &rarr; Record</span>
     <div class="footer-dot"></div>
     <span class="footer-item">&copy; 2026</span>
+    <div class="footer-dot"></div>
+    <a class="footer-item" href="/privacy/">Privacy</a>
+    <div class="footer-dot"></div>
+    <a class="footer-item" href="/terms/">Terms</a>
+    <div class="footer-dot"></div>
+    <a class="footer-item" href="/support/">Support</a>
   </div>
 
 </body>
