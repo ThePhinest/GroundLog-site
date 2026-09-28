@@ -1,0 +1,277 @@
+{
+ "w": 786,
+ "h": 1704,
+ "chapters": [
+  {
+   "id": "daily-log",
+   "title": "The daily log",
+   "blurb": "The day starts here.",
+   "clip": "/academy/clips/01-the-daily-log.mp4",
+   "steps": [
+    {
+     "img": "/assets/tour/daily-log-01.webp",
+     "text": "This is one working day, morning to sign off, on a demo project. Sign in with the account you already have. There is no password to invent.",
+     "beat": "1.1"
+    },
+    {
+     "img": "/assets/tour/daily-log-02.webp",
+     "text": "A new day. The app notices, carries your open items over, and keeps yesterday where it was. Start fresh, and this is your daily log. A digital field notebook built from cards, already set up for your project.",
+     "beat": "1.3"
+    },
+    {
+     "img": "/assets/tour/daily-log-03.webp",
+     "text": "Everything lives inside a project. The chip at the top always tells you which one you are in. Firms with several sites switch here.",
+     "beat": "1.2"
+    },
+    {
+     "img": "/assets/tour/daily-log-04.webp",
+     "text": "Set your time in and the day starts tracking itself. Hours and mileage add up on their own.",
+     "beat": "1.4"
+    },
+    {
+     "img": "/assets/tour/daily-log-05.webp",
+     "text": "Weather fills itself for your location. Temperatures, wind, rain, sunrise and sunset. Ready for the report.",
+     "beat": "1.5"
+    },
+    {
+     "img": "/assets/tour/daily-log-06.webp",
+     "text": "The compliance checklist keeps your walkdown honest. Regulatory flags, a turbid discharge, a storm event, drop straight into the log.",
+     "beat": "1.6"
+    },
+    {
+     "img": "/assets/tour/daily-log-07.webp",
+     "text": "Add the details in your own words. Every text field grows with what you write.",
+     "beat": "1.7"
+    },
+    {
+     "img": "/assets/tour/daily-log-08.webp",
+     "text": "The calendar shows every day you have logged. Yesterday is one tap away, and today carries forward what it should.",
+     "beat": "1.8"
+    },
+    {
+     "img": "/assets/tour/daily-log-09.webp",
+     "text": "Every page is one tap away. Map, photos, calendar, and the rest under More.",
+     "beat": "1.9"
+    }
+   ]
+  },
+  {
+   "id": "field-map",
+   "title": "Field map and tracker",
+   "blurb": "Real work on real ground.",
+   "clip": "/academy/clips/02-field-map-and-tracker.mp4",
+   "steps": [
+    {
+     "img": "/assets/tour/field-map-01.webp",
+     "text": "The field map is where GroundLog tracks real work on real ground. Your site, on satellite, with every layer you have drawn.",
+     "beat": "2.1"
+    },
+    {
+     "img": "/assets/tour/field-map-02.webp",
+     "text": "Every tracker category starts from a template. Seeding, ground disturbance, linear practices like silt fence. Pick the closest one. Everything stays editable.",
+     "beat": "2.6"
+    },
+    {
+     "img": "/assets/tour/field-map-03.webp",
+     "text": "A category is built from states. Each state has its own color and its own progress. Ground disturbance runs active, inactive, temporary, final, closeout.",
+     "beat": "2.7"
+    },
+    {
+     "img": "/assets/tour/field-map-04.webp",
+     "text": "Tap any layer and you get its acreage, its date, its state, and what went down on it.",
+     "beat": "3.4"
+    },
+    {
+     "img": "/assets/tour/field-map-05.webp",
+     "text": "Now open the tracker log. Every state measured against the plan, acre by acre, automatically. And the number the permit cares about: total open right now, against the cap. Nobody adds it up by hand.",
+     "beat": "3.5"
+    }
+   ]
+  },
+  {
+   "id": "photos",
+   "title": "Photos",
+   "blurb": "Stamped, tagged, pinned.",
+   "clip": "/academy/clips/03-photos.mp4",
+   "steps": [
+    {
+     "img": "/assets/tour/photos-01.webp",
+     "text": "The Photos page groups your day for you. Newest first, by date. Every one stamped with the time and where you were standing.",
+     "beat": "4.2"
+    },
+    {
+     "img": "/assets/tour/photos-02.webp",
+     "text": "Open a photo and tag it. Tag it for the stormwater inspection, or for the seeding record, and it flows to that report on its own.",
+     "beat": "4.3"
+    },
+    {
+     "img": "/assets/tour/photos-03.webp",
+     "text": "The stamp is a rendering, not paint. The clean original is always kept, and every element of the stamp can be turned off per photo, forever.",
+     "beat": "4.1b"
+    },
+    {
+     "img": "/assets/tour/photos-04.webp",
+     "text": "Every photo is also a pin on the map, where you were standing when you took it. Show today's, a date range, or all of them, and tap a pin to see the shot.",
+     "beat": "4.4"
+    },
+    {
+     "img": "/assets/tour/photos-05.webp",
+     "text": "From the pin, link the photo to the work it shows. The layer keeps it, and the photo remembers the layer. Evidence, both directions.",
+     "beat": "4.5"
+    }
+   ]
+  },
+  {
+   "id": "compliance",
+   "title": "Compliance records",
+   "blurb": "A running record.",
+   "clip": "/academy/clips/04-compliance-records.mp4",
+   "steps": [
+    {
+     "img": "/assets/tour/compliance-01.webp",
+     "text": "Compliance is a running record, not a form you fill once. Every observation is an entry with a date, a location and a status.",
+     "beat": "5.1"
+    },
+    {
+     "img": "/assets/tour/compliance-02.webp",
+     "text": "Add one from the field. What you saw, where, how serious, with a photo. It is in the record the moment you save.",
+     "beat": "5.2"
+    },
+    {
+     "img": "/assets/tour/compliance-03.webp",
+     "text": "An agency walks the site. The visit is its own record. Who came, what they saw, what they asked for. One tap writes the summary into the daily log, and the running visit log exports on its own.",
+     "beat": "5.3"
+    },
+    {
+     "img": "/assets/tour/compliance-04.webp",
+     "text": "A spill gets the same treatment. What was released, how much, and where. The record asks what the incident form asks, runs the reportability test for your state, and keeps a timed log of who you notified and when.",
+     "beat": "5.4"
+    },
+    {
+     "img": "/assets/tour/compliance-05.webp",
+     "text": "Open items are your to do list on the site. Add one, give it a due date, and it will find you. Resolve it with a note. The history stays.",
+     "beat": "5.5"
+    }
+   ]
+  },
+  {
+   "id": "inspection",
+   "title": "Stormwater inspection",
+   "blurb": "From header to signature.",
+   "clip": "/academy/clips/05-stormwater-inspection.mp4",
+   "steps": [
+    {
+     "img": "/assets/tour/inspection-01.webp",
+     "text": "Stormwater inspections are kept on the Reports page. Here is the running list, newest on top, each one marked draft or completed.",
+     "beat": "6.1"
+    },
+    {
+     "img": "/assets/tour/inspection-02.webp",
+     "text": "Start today's. The header already knows who you are, your credential and the permit. Everything else carries forward from last time.",
+     "beat": "6.2"
+    },
+    {
+     "img": "/assets/tour/inspection-03.webp",
+     "text": "The disturbed area summary refreshes from the tracker log. One tap, and the acres are the acres you drew.",
+     "beat": "6.3"
+    },
+    {
+     "img": "/assets/tour/inspection-04.webp",
+     "text": "Drainage areas and discharge points carry forward from the last inspection. Mark them acceptable in one tap. Flip one to deficient and the note opens.",
+     "beat": "6.4"
+    },
+    {
+     "img": "/assets/tour/inspection-05.webp",
+     "text": "Every practice from the SWPPP is a row. Installed, condition, maintenance, corrective action.",
+     "beat": "6.5"
+    },
+    {
+     "img": "/assets/tour/inspection-06.webp",
+     "text": "Corrective actions collect themselves from what you flagged. Add your own if you need to.",
+     "beat": "6.6"
+    },
+    {
+     "img": "/assets/tour/inspection-07.webp",
+     "text": "Photos you tagged for stormwater since the last inspection are already here.",
+     "beat": "6.7"
+    },
+    {
+     "img": "/assets/tour/inspection-08.webp",
+     "text": "Sign it on the screen, with a finger or a stylus. Complete locks the record, and offers to carry what you flagged into the compliance log. Reopening asks you to confirm, because this is a regulatory record.",
+     "beat": "6.8"
+    },
+    {
+     "img": "/assets/tour/inspection-09.webp",
+     "text": "Export a PDF or a Word file in the format the agency expects, and send it from your phone.",
+     "beat": "6.9"
+    }
+   ]
+  },
+  {
+   "id": "daily-report",
+   "title": "The daily report",
+   "blurb": "One button, the whole day.",
+   "clip": "/academy/clips/06-the-daily-report.mp4",
+   "steps": [
+    {
+     "img": "/assets/tour/daily-report-01.webp",
+     "text": "End of the day. Time Out closes the timesheet, and the hours are already added up.",
+     "beat": "7.1"
+    },
+    {
+     "img": "/assets/tour/daily-report-02.webp",
+     "text": "One button turns the day into a report. If you turn it on, a narrative draft writes itself from your entries. It is yours to edit, and it only sees what you allowed.",
+     "beat": "7.2"
+    },
+    {
+     "img": "/assets/tour/daily-report-03.webp",
+     "text": "The cover carries your firm's logo and colors, set once per project. Weather, checklist, compliance, photos with captions. Nothing retyped.",
+     "beat": "7.3"
+    },
+    {
+     "img": "/assets/tour/daily-report-04.webp",
+     "text": "Every report is kept. Open any day again, export any version again.",
+     "beat": "7.4"
+    },
+    {
+     "img": "/assets/tour/daily-report-05.webp",
+     "text": "Submit the day to the project. Your reviewer gets it. You are done for the day.",
+     "beat": "7.5"
+    }
+   ]
+  },
+  {
+   "id": "team",
+   "title": "Team and account",
+   "blurb": "Your account is yours.",
+   "clip": "/academy/clips/07-team-and-account.mp4",
+   "steps": [
+    {
+     "img": "/assets/tour/team-01.webp",
+     "text": "Under More: every page, your project, your team, your account.",
+     "beat": "9.1"
+    },
+    {
+     "img": "/assets/tour/team-02.webp",
+     "text": "Every project carries its jurisdiction. The agencies, the permit program, the notification clocks. Set once, and every record you saw already knew.",
+     "beat": "9.2"
+    },
+    {
+     "img": "/assets/tour/team-03.webp",
+     "text": "Invite a teammate with a link or a QR code. Roles set what they can change, never what they can see.",
+     "beat": "9.3"
+    },
+    {
+     "img": "/assets/tour/team-04.webp",
+     "text": "Your account is yours. Your name, your sign in methods, your data. A firm is a layer on top. The account stays with you.",
+     "beat": "9.4"
+    },
+    {
+     "img": "/assets/tour/team-05.webp",
+     "text": "Every daily log is vaulted before anything replaces it. Log Recovery brings a day back in one tap.",
+     "beat": "9.5"
+    }
+   ]
+  }
+ ]
+}

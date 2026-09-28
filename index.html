@@ -1,413 +1,442 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GroundLog — AI-powered. Boots required.</title>
-  <meta name="description" content="GroundLog is the field compliance platform built for environmental inspectors. AI-powered reporting, built from the ground up." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --green: #006B75;
-      --green-light: #00929f;
-      --green-glow: rgba(0, 107, 117, 0.18);
-      --amber: #C9A84C;
-      --bg: #0a0c0c;
-      --bg-2: #0f1313;
-      --surface: #131818;
-      --text: #e8eded;
-      --text-muted: #7a9090;
-      --border: rgba(0, 107, 117, 0.2);
-    }
-
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Oswald', sans-serif;
-      overflow: hidden;
-    }
-
-    /* === TOPO TEXTURE BACKGROUND === */
-    .bg-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .bg-canvas svg {
-      width: 100%;
-      height: 100%;
-      opacity: 0.09;
-    }
-
-    /* Radial glow center */
-    .bg-glow {
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      background: radial-gradient(ellipse 70% 60% at 50% 52%, rgba(0,107,117,0.22) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* Horizontal scan line */
-    .scan-line {
-      position: fixed;
-      left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--green), transparent);
-      opacity: 0;
-      z-index: 2;
-      animation: scan 8s ease-in-out infinite;
-    }
-    @keyframes scan {
-      0%   { top: -2%; opacity: 0; }
-      5%   { opacity: 0.4; }
-      95%  { opacity: 0.15; }
-      100% { top: 102%; opacity: 0; }
-    }
-
-    /* === LAYOUT === */
-    .page {
-      position: relative;
-      z-index: 10;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      gap: 0;
-    }
-
-    /* === BADGE === */
-    .badge {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--amber);
-      border: 1px solid rgba(201, 168, 76, 0.35);
-      padding: 0.35rem 0.9rem;
-      border-radius: 2px;
-      margin-bottom: 2.8rem;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards 0.2s;
-    }
-
-    /* === WORDMARK === */
-    .wordmark {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0;
-      margin-bottom: 1.6rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 0.5s;
-    }
-
-    .wordmark-row {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      line-height: 1;
-    }
-
-    .wordmark-ground {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 300;
-      font-size: clamp(3.2rem, 10vw, 6.8rem);
-      letter-spacing: 0.04em;
-      color: var(--text);
-      text-transform: uppercase;
-    }
-
-    .wordmark-bar {
-      width: 3px;
-      height: clamp(2.8rem, 8vw, 5.6rem);
-      background: var(--amber);
-      margin: 0 clamp(0.6rem, 1.5vw, 1.1rem);
-      flex-shrink: 0;
-    }
-
-    .wordmark-log {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800;
-      font-size: clamp(3.2rem, 10vw, 6.8rem);
-      letter-spacing: 0.04em;
-      color: var(--green);
-      text-transform: uppercase;
-      text-shadow: 0 0 60px rgba(0, 107, 117, 0.45);
-    }
-
-    .wordmark-io {
-      font-family: 'IBM Plex Mono', monospace;
-      font-weight: 400;
-      font-size: clamp(0.9rem, 2.2vw, 1.5rem);
-      color: var(--text-muted);
-      align-self: flex-end;
-      margin-bottom: 0.6rem;
-      margin-left: 0.2rem;
-    }
-
-    .wordmark-sub {
-      font-family: 'IBM Plex Mono', monospace;
-      font-weight: 400;
-      font-size: clamp(0.55rem, 1.1vw, 0.72rem);
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-top: 0.4rem;
-      padding-left: 0.1rem;
-    }
-
-    /* === RULE === */
-    .rule {
-      width: clamp(200px, 40vw, 480px);
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--green), transparent);
-      margin-bottom: 1.8rem;
-      opacity: 0;
-      animation: fadeIn 0.8s ease forwards 0.9s;
-    }
-
-    /* === TAGLINE === */
-    .tagline {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: clamp(1.1rem, 3.2vw, 1.9rem);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 2.4rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 1s;
-    }
-
-    .tagline span {
-      color: var(--text);
-    }
-
-    /* === DESCRIPTION === */
-    .description {
-      font-family: 'Oswald', sans-serif;
-      font-weight: 400;
-      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
-      line-height: 1.75;
-      color: var(--text-muted);
-      text-align: center;
-      max-width: 520px;
-      letter-spacing: 0.02em;
-      margin-bottom: 3.2rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 1.2s;
-    }
-
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.9rem;
-      margin-top: -1.2rem;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.7s ease forwards 1.5s;
-    }
-
-    .cta {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 0.8rem 1.3rem;
-      border-radius: 2px;
-      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
-    }
-
-    .cta:hover, .cta:focus-visible { border-color: var(--green-light); color: #fff; }
-
-    .cta-primary { color: #121212; background: var(--amber); border-color: var(--amber); }
-
-    .cta-primary:hover, .cta-primary:focus-visible { background: #d8b95f; border-color: #d8b95f; color: #121212; }
-
-    a.footer-item { color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; }
-
-    a.footer-item:hover, a.footer-item:focus-visible { color: var(--green-light); }
-
-    .description strong {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    /* === FOOTER LINE === */
-    .footer {
-      position: fixed;
-      bottom: 2rem;
-      left: 0; right: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1.5rem;
-      opacity: 0;
-      animation: fadeIn 0.8s ease forwards 1.6s;
-    }
-
-    .footer-item {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #3a5050;
-    }
-
-    .footer-dot {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: var(--green);
-      opacity: 0.5;
-    }
-
-    /* === CORNER ACCENTS === */
-    .corner {
-      position: fixed;
-      width: 32px;
-      height: 32px;
-      opacity: 0;
-      animation: fadeIn 1s ease forwards 1.8s;
-    }
-    .corner-tl { top: 1.5rem; left: 1.5rem; border-top: 1px solid var(--green); border-left: 1px solid var(--green); }
-    .corner-tr { top: 1.5rem; right: 1.5rem; border-top: 1px solid var(--green); border-right: 1px solid var(--green); }
-    .corner-bl { bottom: 1.5rem; left: 1.5rem; border-bottom: 1px solid var(--green); border-left: 1px solid var(--green); }
-    .corner-br { bottom: 1.5rem; right: 1.5rem; border-bottom: 1px solid var(--green); border-right: 1px solid var(--green); }
-
-    /* === ANIMATIONS === */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    /* === MOBILE === */
-    @media (max-width: 480px) {
-      html, body { height: auto; min-height: 100%; overflow: auto; }
-      .page { justify-content: center; padding: 3rem 1.5rem 1.5rem; min-height: calc(100vh - 6rem); height: auto; }
-      .corner { display: none; }
-      .footer { position: relative; z-index: 10; bottom: auto; flex-wrap: wrap; gap: 0.8rem 1rem; padding: 0 1.5rem 2rem; }
-    }
-
-    @media (max-height: 720px) and (min-width: 481px) {
-      html, body { height: auto; min-height: 100%; overflow: auto; }
-      .page { height: auto; min-height: calc(100vh - 5rem); }
-      .footer { position: relative; z-index: 10; bottom: auto; padding-bottom: 2rem; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GroundLog | The field notebook for environmental inspectors</title>
+<meta name="description" content="GroundLog is the field compliance platform for environmental inspectors: daily log, field map and tracker, stamped photos, compliance records, stormwater inspections and reports. By GroundLog LLC.">
+<link rel="canonical" href="https://groundlog.io/">
+<meta name="theme-color" content="#121212">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GroundLog">
+<meta property="og:title" content="GroundLog | The field notebook for environmental inspectors">
+<meta property="og:description" content="GroundLog is the field compliance platform for environmental inspectors: daily log, field map and tracker, stamped photos, compliance records, stormwater inspections and reports. By GroundLog LLC.">
+<meta property="og:url" content="https://groundlog.io/">
+<meta property="og:image" content="https://groundlog.io/assets/brand/og-1200x630.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/brand/favicon-48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/brand/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css?v=2026-09-28">
+<link rel="stylesheet" href="/assets/site.css?v=2026-09-28">
+<meta name="apple-itunes-app" content="app-id=6766680599">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://groundlog.io/#org","name":"GroundLog LLC","legalName":"GroundLog LLC","url":"https://groundlog.io/","logo":"https://groundlog.io/assets/brand/icon-192.png","email":"support@groundlog.io","address":{"@type":"PostalAddress","addressRegion":"PA","addressCountry":"US"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer support","email":"support@groundlog.io"},{"@type":"ContactPoint","contactType":"legal","email":"legal@groundlog.io"}]},{"@type":"WebSite","@id":"https://groundlog.io/#site","url":"https://groundlog.io/","name":"GroundLog","publisher":{"@id":"https://groundlog.io/#org"}},{"@type":"SoftwareApplication","name":"GroundLog","applicationCategory":"BusinessApplication","operatingSystem":"iOS, iPadOS, Web","url":"https://groundlog.io/","downloadUrl":"https://apps.apple.com/us/app/id6766680599","description":"Field compliance platform for environmental inspectors: daily log, field map, stamped photos, compliance records, stormwater inspections and reports.","publisher":{"@id":"https://groundlog.io/#org"}}]}</script>
 </head>
 <body>
-
-  <!-- Topographic background -->
-  <div class="bg-canvas">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="wrap">
+    <a class="wm" href="/" aria-label="GroundLog home">
+      <span class="wm-ground" aria-hidden="true">GROUND</span><span class="wm-bar" aria-hidden="true"></span><span class="wm-log" aria-hidden="true">LOG</span><span class="wm-io" aria-hidden="true">.io</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="/#product">Product</a>
+      <a href="/tour/">Tour</a>
+      <a href="/academy/">Academy</a>
+      <a href="/company/">Company</a>
+      <a href="/support/">Support</a>
+      <a class="btn btn-sm" href="https://apps.apple.com/us/app/id6766680599">Get the app</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
     <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="blur"><feGaussianBlur stdDeviation="0.8"/></filter>
-      </defs>
-      <g fill="none" stroke="#006B75" stroke-width="0.8" filter="url(#blur)">
-        <!-- Topo contour lines -->
-        <ellipse cx="720" cy="450" rx="80" ry="50"/>
-        <ellipse cx="720" cy="450" rx="160" ry="100"/>
-        <ellipse cx="720" cy="450" rx="240" ry="155"/>
-        <ellipse cx="720" cy="450" rx="330" ry="215"/>
-        <ellipse cx="720" cy="450" rx="430" ry="280"/>
-        <ellipse cx="720" cy="450" rx="540" ry="355"/>
-        <ellipse cx="720" cy="450" rx="660" ry="440"/>
-        <ellipse cx="720" cy="450" rx="790" ry="530"/>
-        <ellipse cx="720" cy="450" rx="940" ry="625"/>
-        <ellipse cx="720" cy="450" rx="1110" ry="730"/>
-        <ellipse cx="720" cy="450" rx="1310" ry="850"/>
-        <!-- Off-center secondary cluster -->
-        <ellipse cx="200" cy="150" rx="60" ry="40"/>
-        <ellipse cx="200" cy="150" rx="130" ry="85"/>
+      <g fill="none" stroke="#2aa7b3" stroke-width="0.9">
+        <ellipse cx="1040" cy="430" rx="80" ry="50"/><ellipse cx="1040" cy="430" rx="160" ry="100"/>
+        <ellipse cx="1040" cy="430" rx="240" ry="155"/><ellipse cx="1040" cy="430" rx="330" ry="215"/>
+        <ellipse cx="1040" cy="430" rx="430" ry="280"/><ellipse cx="1040" cy="430" rx="540" ry="355"/>
+        <ellipse cx="1040" cy="430" rx="660" ry="440"/><ellipse cx="1040" cy="430" rx="790" ry="530"/>
+        <ellipse cx="1040" cy="430" rx="940" ry="625"/><ellipse cx="1040" cy="430" rx="1110" ry="730"/>
+        <ellipse cx="200" cy="150" rx="60" ry="40"/><ellipse cx="200" cy="150" rx="130" ry="85"/>
         <ellipse cx="200" cy="150" rx="210" ry="140"/>
-        <ellipse cx="1280" cy="750" rx="70" ry="45"/>
-        <ellipse cx="1280" cy="750" rx="150" ry="95"/>
-        <ellipse cx="1280" cy="750" rx="240" ry="155"/>
-        <!-- Grid overlay -->
-        <line x1="0" y1="225" x2="1440" y2="225"/>
-        <line x1="0" y1="450" x2="1440" y2="450"/>
-        <line x1="0" y1="675" x2="1440" y2="675"/>
-        <line x1="360" y1="0" x2="360" y2="900"/>
-        <line x1="720" y1="0" x2="720" y2="900"/>
-        <line x1="1080" y1="0" x2="1080" y2="900"/>
       </g>
     </svg>
   </div>
-
-  <div class="bg-glow"></div>
-  <div class="scan-line"></div>
-
-  <!-- Corner accents -->
-  <div class="corner corner-tl"></div>
-  <div class="corner corner-tr"></div>
-  <div class="corner corner-bl"></div>
-  <div class="corner corner-br"></div>
-
-  <!-- Main content -->
-  <div class="page">
-
-    <div class="badge">Now on the App Store</div>
-
-    <div class="wordmark">
-      <div class="wordmark-row">
-        <span class="wordmark-ground">Ground</span>
-        <div class="wordmark-bar"></div>
-        <span class="wordmark-log">Log</span>
-        <span class="wordmark-io">.io</span>
+  <div class="wrap">
+    <div>
+      <span class="badge">Now on the App Store</span>
+      <h1 class="h1">The field notebook built for <span class="teal">environmental inspectors</span></h1>
+      <p class="tagline"><b>AI-powered.</b> Boots required.</p>
+      <p class="lede">Observe and report. GroundLog keeps the daily log, the field map, stamped photos, compliance records and stormwater inspections in one app, and turns the day into the report the permit asks for.</p>
+      <div class="btn-row">
+        <a class="btn" href="https://apps.apple.com/us/app/id6766680599">Download on the App Store</a>
+        <a class="btn btn-ghost" href="/tour/">Take the tour</a>
       </div>
-      <div class="wordmark-sub">Field Compliance Platform</div>
+      <p class="hero-note">iPhone, iPad and any browser. Works offline in the field.</p>
+    </div>
+    <div class="phones" aria-hidden="true">
+      <div class="phone side l"><img src="/assets/tour/daily-log-05.webp" width="786" height="1704" alt=""></div>
+      <div class="phone"><img src="/assets/tour/field-map-01.webp" width="786" height="1704" alt=""></div>
+      <div class="phone side r"><img src="/assets/tour/field-map-05.webp" width="786" height="1704" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" aria-labelledby="three-words">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">The job in three words</span>
+      <h2 class="h2" id="three-words">Observe and report</h2>
+      <p class="lede">Ask any environmental inspector what the job is and you will hear the same three words. See what happened, get it on the record, and be able to prove it. GroundLog is built for that job and nothing else.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="num">01</span>
+        <h3 class="h3">See what happened</h3>
+        <p>The daily log, the field map and the camera travel in one pocket. Log it where you are standing, with or without a signal.</p>
+      </div>
+      <div class="pillar">
+        <span class="num">02</span>
+        <h3 class="h3">Get it on the record</h3>
+        <p>Every entry carries its date, its location and its status. Every daily log is vaulted before anything replaces it.</p>
+      </div>
+      <div class="pillar">
+        <span class="num">03</span>
+        <h3 class="h3">Be able to prove it</h3>
+        <p>Stamped photos, signed inspections and exports in PDF, Word, Excel and KML. The record goes where the permit needs it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="who">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Who it is for</span>
+      <h2 class="h2" id="who">Built in the field, for the people in it</h2>
+      <p class="lede">GroundLog is built by a working environmental inspector and used on active construction sites. The features come from problems met on real jobs.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card card-line">
+        <span class="eyebrow">Boots</span>
+        <h3 class="h3">Inspectors and monitors</h3>
+        <p>One app for the daily log, the map, photos, compliance entries and the stormwater inspection. Enter it once and every report already has it.</p>
+      </div>
+      <div class="card card-line">
+        <span class="eyebrow">Reviewer</span>
+        <h3 class="h3">Reviewers and leads</h3>
+        <p>Submitted days arrive ready to read, sign or return. Compliance entries shared to the project land in its compliance log, on the punch list and on the map.</p>
+      </div>
+      <div class="card card-line">
+        <span class="eyebrow">Boardroom</span>
+        <h3 class="h3">Firms and owners</h3>
+        <p>Reports carry your logo and colors, set once per project. Roles decide who can change what. The record is there when someone asks for it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="product" aria-labelledby="product-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">The product</span>
+      <h2 class="h2" id="product-h">One working day, morning to sign off</h2>
+      <p class="lede">Every screen below is the app as it ships, recorded on a demo project. No mockups.</p>
     </div>
 
-    <div class="rule"></div>
+    <article class="feature">
+      <div class="shot two">
+        <div class="phone"><img src="/assets/tour/daily-log-04.webp" width="786" height="1704" loading="lazy" alt="Daily timesheet card with time in set to 7:00 AM and a 30 minute lunch"></div>
+        <div class="phone"><img src="/assets/tour/daily-log-05.webp" width="786" height="1704" loading="lazy" alt="Weather card filled with temperatures, wind, rainfall and a seven day rain outlook"></div>
+      </div>
+      <div>
+        <span class="eyebrow">01 &middot; Daily log</span>
+        <h2 class="h2">The day, already set up</h2>
+        <p class="say">A digital field notebook built from cards, already set up for your project. The app notices a new day, carries your open items over, and keeps yesterday where it was.</p>
+        <ul class="ticks">
+          <li>Set your time in and the day tracks itself. Hours and mileage add up on their own.</li>
+          <li>Weather fills itself for your location: temperatures, wind, rain, sunrise and sunset.</li>
+          <li>The compliance checklist and regulatory flags drop straight into the log.</li>
+          <li>The calendar shows every day you have logged. Yesterday is one tap away.</li>
+        </ul>
+        <a class="more" href="/tour/#daily-log">See the daily log</a>
+      </div>
+    </article>
 
-    <div class="tagline"><span>AI-powered.</span> Boots required.</div>
+    <article class="feature flip">
+      <div class="shot two">
+        <div class="phone"><img src="/assets/tour/field-map-04.webp" width="786" height="1704" loading="lazy" alt="Map layer details for a ground disturbance area: date, 14.85 acres, location and notes"></div>
+        <div class="phone"><img src="/assets/tour/field-map-05.webp" width="786" height="1704" loading="lazy" alt="Tracker log listing silt fence, seeding and ground disturbance with planned and completed quantities"></div>
+      </div>
+      <div>
+        <span class="eyebrow">02 &middot; Field map and tracker</span>
+        <h2 class="h2">Every acre, accounted for</h2>
+        <p class="say">The field map is where GroundLog tracks real work on real ground. Your site, on satellite, with every layer you have drawn.</p>
+        <ul class="ticks">
+          <li>Tracker categories start from a template: seeding, ground disturbance, linear practices like silt fence.</li>
+          <li>Each category is built from states, and each state has its own color and its own progress.</li>
+          <li>Tap any layer for its acreage, its date, its state and what went down on it.</li>
+          <li>The tracker log totals what is open right now against the cap. Nobody adds it up by hand.</li>
+        </ul>
+        <a class="more" href="/tour/#field-map">See the map and tracker</a>
+      </div>
+    </article>
 
-    <p class="description">
-      GroundLog is a <strong>field compliance platform</strong> built for <strong>project compliance</strong> — from daily logs and regulatory checklists to <strong>AI-generated reports</strong>, synced from the field to the office in real time.
-    </p>
+    <article class="feature">
+      <div class="shot two">
+        <div class="phone"><img src="/assets/tour/photos-02.webp" width="786" height="1704" loading="lazy" alt="A stamped site photo with stormwater and seed tag labels applied"></div>
+        <div class="phone"><img src="/assets/tour/photos-04.webp" width="786" height="1704" loading="lazy" alt="A photo pin opened on the satellite map showing the picture taken at that spot"></div>
+      </div>
+      <div>
+        <span class="eyebrow">03 &middot; Photos</span>
+        <h2 class="h2">Evidence, both directions</h2>
+        <p class="say">Every photo is stamped with the time and where you were standing, and every photo is a pin on the map.</p>
+        <ul class="ticks">
+          <li>The stamp is a rendering, not paint. The clean original is always kept.</li>
+          <li>Tag a photo for the stormwater inspection or the seeding record and it flows to that report on its own.</li>
+          <li>Link a photo to the work it shows. The layer keeps it, and the photo remembers the layer.</li>
+        </ul>
+        <a class="more" href="/tour/#photos">See photos</a>
+      </div>
+    </article>
 
-    <div class="cta-row">
-      <a class="cta cta-primary" href="https://apps.apple.com/us/app/id6766680599">Download for iPhone and iPad</a>
-      <a class="cta" href="https://app.groundlog.io">Open the web app</a>
+    <article class="feature flip">
+      <div class="shot two">
+        <div class="phone"><img src="/assets/tour/compliance-01.webp" width="786" height="1704" loading="lazy" alt="Compliance log with status and level filters and an open entry"></div>
+        <div class="phone"><img src="/assets/tour/compliance-05.webp" width="786" height="1704" loading="lazy" alt="Open items list with due dates"></div>
+      </div>
+      <div>
+        <span class="eyebrow">04 &middot; Compliance records</span>
+        <h2 class="h2">A running record, not a form you fill once</h2>
+        <p class="say">Every observation is an entry with a date, a location, a level and a status. It is in the record the moment you save.</p>
+        <ul class="ticks">
+          <li>An agency visit is its own record: who came, what they saw, what they asked for.</li>
+          <li>A spill record asks what the incident form asks and keeps a timed log of who you notified and when.</li>
+          <li>Open items carry a due date and find you. Resolve one with a note and the history stays.</li>
+        </ul>
+        <a class="more" href="/tour/#compliance">See compliance records</a>
+      </div>
+    </article>
+
+    <article class="feature">
+      <div class="shot two">
+        <div class="phone"><img src="/assets/tour/inspection-03.webp" width="786" height="1704" loading="lazy" alt="Disturbed area summary of a stormwater inspection, refreshed from the tracker"></div>
+        <div class="phone"><img src="/assets/tour/inspection-08.webp" width="786" height="1704" loading="lazy" alt="Signature pad with a signature drawn on the screen"></div>
+      </div>
+      <div>
+        <span class="eyebrow">05 &middot; Stormwater inspections</span>
+        <h2 class="h2">From header to signature</h2>
+        <p class="say">The header already knows who you are, your credential and the permit. Everything else carries forward from last time.</p>
+        <ul class="ticks">
+          <li>The disturbed area summary refreshes from the tracker. The acres are the acres you drew.</li>
+          <li>Drainage areas, discharge points and every practice from the SWPPP are rows you mark, not text you retype.</li>
+          <li>Corrective actions collect themselves from what you flagged.</li>
+          <li>Sign it on the screen. Complete locks the record. Export a PDF or a Word file.</li>
+        </ul>
+        <a class="more" href="/tour/#inspection">See an inspection</a>
+      </div>
+    </article>
+
+    <article class="feature flip">
+      <div class="shot two">
+        <div class="phone"><img src="/assets/tour/daily-report-02.webp" width="786" height="1704" loading="lazy" alt="Generate report prompt: turn today's field log into a formal compliance report"></div>
+        <div class="phone"><img src="/assets/tour/daily-report-03.webp" width="786" height="1704" loading="lazy" alt="Report branding settings with logo size, colors and a sample report header"></div>
+      </div>
+      <div>
+        <span class="eyebrow">06 &middot; Daily report</span>
+        <h2 class="h2">One button turns the day into a report</h2>
+        <p class="say">Weather, checklist, compliance and photos with captions. Nothing retyped.</p>
+        <ul class="ticks">
+          <li>If you turn it on, AI drafts the narrative from your entries. It is yours to edit, and it only sees what you allowed.</li>
+          <li>The cover carries your firm's logo and colors, set once per project.</li>
+          <li>Every report is kept. Open any day again and export it again.</li>
+        </ul>
+        <a class="more" href="/tour/#daily-report">See the daily report</a>
+      </div>
+    </article>
+
+    <article class="feature">
+      <div class="shot two">
+        <div class="phone"><img src="/assets/tour/team-03.webp" width="786" height="1704" loading="lazy" alt="Invite dialog with four roles: Glasses, Reviewer, Boots and Lead"></div>
+        <div class="phone"><img src="/assets/tour/daily-report-05.webp" width="786" height="1704" loading="lazy" alt="Submit the day dialog listing what becomes visible to project members"></div>
+      </div>
+      <div>
+        <span class="eyebrow">07 &middot; Team and review</span>
+        <h2 class="h2">Roles set what they can change, never what they can see</h2>
+        <p class="say">Invite a teammate with a link or a QR code. Submit the day to the project and your reviewer gets it.</p>
+        <ul class="ticks">
+          <li>Four roles, from view only to project lead.</li>
+          <li>Every project carries its jurisdiction: the agencies, the permit program and the notification clocks.</li>
+          <li>Your personal notes are never part of a submission.</li>
+        </ul>
+        <a class="more" href="/tour/#team">See team and account</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="tour-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Click through tour</span>
+      <h2 class="h2" id="tour-h">Walk the whole day at your own pace</h2>
+      <p class="lede">Seven chapters, one step at a time. No sign up, no sales call.</p>
     </div>
-
+    <div class="strip">
+      <a href="/tour/#daily-log"><div class="phone"><img src="/assets/tour/daily-log-05.webp" width="786" height="1704" loading="lazy" alt=""></div><span>The daily log</span></a>
+      <a href="/tour/#field-map"><div class="phone"><img src="/assets/tour/field-map-01.webp" width="786" height="1704" loading="lazy" alt=""></div><span>Field map and tracker</span></a>
+      <a href="/tour/#photos"><div class="phone"><img src="/assets/tour/photos-02.webp" width="786" height="1704" loading="lazy" alt=""></div><span>Photos</span></a>
+      <a href="/tour/#compliance"><div class="phone"><img src="/assets/tour/compliance-04.webp" width="786" height="1704" loading="lazy" alt=""></div><span>Compliance records</span></a>
+      <a href="/tour/#inspection"><div class="phone"><img src="/assets/tour/inspection-04.webp" width="786" height="1704" loading="lazy" alt=""></div><span>Stormwater inspection</span></a>
+      <a href="/tour/#daily-report"><div class="phone"><img src="/assets/tour/daily-report-03.webp" width="786" height="1704" loading="lazy" alt=""></div><span>The daily report</span></a>
+      <a href="/tour/#team"><div class="phone"><img src="/assets/tour/team-03.webp" width="786" height="1704" loading="lazy" alt=""></div><span>Team and account</span></a>
+    </div>
   </div>
+</section>
 
-  <div class="footer">
-    <span class="footer-item">groundlog.io</span>
-    <div class="footer-dot"></div>
-    <span class="footer-item">Field &rarr; Office &rarr; Record</span>
-    <div class="footer-dot"></div>
-    <span class="footer-item">&copy; 2026 GroundLog LLC</span>
-    <div class="footer-dot"></div>
-    <a class="footer-item" href="/privacy/">Privacy</a>
-    <div class="footer-dot"></div>
-    <a class="footer-item" href="/terms/">Terms</a>
-    <div class="footer-dot"></div>
-    <a class="footer-item" href="/support/">Support</a>
+<section class="sec sec-alt" aria-labelledby="privacy-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Privacy and ownership</span>
+      <h2 class="h2" id="privacy-h">Your account is yours</h2>
+      <p class="lede">Your name, your sign in methods, your data. A firm is a layer on top. The account stays with you.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3 class="h3">Private until you share</h3>
+        <p>Your work stays private until you submit a day or share an item to the project. Personal notes are never shared.</p>
+      </div>
+      <div class="card">
+        <h3 class="h3">No ads, no data sales</h3>
+        <p>We do not use your data for advertising and we do not sell it. We collect what the app needs to run for you.</p>
+      </div>
+      <div class="card">
+        <h3 class="h3">AI only when you ask</h3>
+        <p>Report drafting runs only when you tap Generate Report. Your content is not used to train AI models.</p>
+      </div>
+      <div class="card">
+        <h3 class="h3">Works offline</h3>
+        <p>Your work is stored on the device and syncs when you are back on a connection.</p>
+      </div>
+      <div class="card">
+        <h3 class="h3">Your data leaves with you</h3>
+        <p>Reports as Word files, tracking data as Excel, map data as KML, photos as a ZIP. From inside the app, no request needed.</p>
+      </div>
+      <div class="card">
+        <h3 class="h3">A safety copy of every day</h3>
+        <p>Every daily log is vaulted before anything replaces it. Log Recovery brings a day back in one tap.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:26px">The details are in the <a href="/privacy/">Privacy Policy</a>.</p>
   </div>
+</section>
 
+<section class="sec" aria-labelledby="academy-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">GroundLog Academy</span>
+      <h2 class="h2" id="academy-h">A day in the life, in short clips</h2>
+      <p class="lede">Narrated walkthroughs with captions, from the first sign in to the signed report, plus how to clips for single tasks.</p>
+    </div>
+    <div class="clips">
+      <a class="clip" href="/academy/#00-observe-and-report">
+        <div class="frame play"><img src="/academy/clips/00-observe-and-report.webp" width="590" height="1279" loading="lazy" alt=""></div>
+        <div class="meta"><span>Opening</span><span>0:24</span></div>
+        <h3 class="h3">Observe and report</h3>
+        <p>What the job is, and what GroundLog is for.</p>
+      </a>
+      <a class="clip" href="/academy/#02-field-map-and-tracker">
+        <div class="frame play"><img src="/academy/clips/02-field-map-and-tracker.webp" width="590" height="1279" loading="lazy" alt=""></div>
+        <div class="meta"><span>Chapter 2</span><span>0:55</span></div>
+        <h3 class="h3">Field map and tracker</h3>
+        <p>Categories, states, layers and the tracker log with the open acreage total.</p>
+      </a>
+      <a class="clip" href="/academy/#05-stormwater-inspection">
+        <div class="frame play"><img src="/academy/clips/05-stormwater-inspection.webp" width="590" height="1279" loading="lazy" alt=""></div>
+        <div class="meta"><span>Chapter 5</span><span>1:16</span></div>
+        <h3 class="h3">Stormwater inspection</h3>
+        <p>A full inspection, from the header to the signature and the export.</p>
+      </a>
+      <a class="clip" href="/academy/#how-to-seed-tags-and-bag-ledger">
+        <div class="frame play"><img src="/academy/clips/how-to-seed-tags-and-bag-ledger.webp" width="590" height="1279" loading="lazy" alt=""></div>
+        <div class="meta"><span>How to</span><span>1:07</span></div>
+        <h3 class="h3">Seed tags and the bag ledger</h3>
+        <p>Tag the photo, attach it to the area, and let the ledger count the pounds.</p>
+      </a>
+    </div>
+    <p style="margin-top:34px"><a class="more" href="/academy/">All Academy clips</a></p>
+  </div>
+</section>
+
+<section class="sec sec-alt cta-band" id="get" aria-labelledby="get-h">
+  <div class="wrap">
+    <span class="eyebrow">Get GroundLog</span>
+    <h2 class="h2" id="get-h" style="margin-top:14px">Log it once, in the field</h2>
+    <p class="lede">And it carries all the way up. From boots to boardroom.</p>
+    <div class="btn-row">
+      <a class="btn" href="https://apps.apple.com/us/app/id6766680599">Download on the App Store</a>
+      <a class="btn btn-ghost" href="https://app.groundlog.io">Open the web app</a>
+    </div>
+    <p class="hero-note">Setting up a project or a team? Write to <a href="mailto:support@groundlog.io">support@groundlog.io</a>.</p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="company-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">The company</span>
+      <h2 class="h2" id="company-h">GroundLog LLC</h2>
+      <p class="lede">GroundLog is made and operated by GroundLog LLC, a Pennsylvania limited liability company.</p>
+    </div>
+    <dl class="facts">
+      <div class="fact"><dt>Company</dt><dd>GroundLog LLC<br>Pennsylvania, USA</dd></div>
+      <div class="fact"><dt>Support</dt><dd><a href="mailto:support@groundlog.io">support@groundlog.io</a><br><span class="muted">Replies usually within 1 to 2 business days</span></dd></div>
+      <div class="fact"><dt>Legal</dt><dd><a href="mailto:legal@groundlog.io">legal@groundlog.io</a><br><a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a></dd></div>
+    </dl>
+    <p style="margin-top:30px"><a class="more" href="/company/">About the company</a></p>
+  </div>
+</section>
+
+</main>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a class="wm" href="/" aria-label="GroundLog home">
+          <span class="wm-ground" aria-hidden="true">GROUND</span><span class="wm-bar" aria-hidden="true"></span><span class="wm-log" aria-hidden="true">LOG</span><span class="wm-io" aria-hidden="true">.io</span>
+        </a>
+        <p>The field compliance platform for environmental inspectors. From boots to boardroom.</p>
+      </div>
+      <div>
+        <h2>Product</h2>
+        <ul>
+          <li><a href="/#product">Overview</a></li>
+          <li><a href="/tour/">Tour</a></li>
+          <li><a href="/academy/">Academy</a></li>
+          <li><a href="https://apps.apple.com/us/app/id6766680599">App Store</a></li>
+          <li><a href="https://app.groundlog.io">Web app</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Company</h2>
+        <ul>
+          <li><a href="/company/">About GroundLog LLC</a></li>
+          <li><a href="/support/">Support</a></li>
+          <li><a href="mailto:support@groundlog.io">support@groundlog.io</a></li>
+          <li><a href="mailto:legal@groundlog.io">legal@groundlog.io</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Legal</h2>
+        <ul>
+          <li><a href="/privacy/">Privacy Policy</a></li>
+          <li><a href="/terms/">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>&copy; 2026 GroundLog LLC &middot; Pennsylvania, USA</span>
+      <span>This site sets no cookies and loads nothing from third parties.</span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js?v=2026-09-28" defer></script>
 </body>
 </html>
