@@ -70,7 +70,6 @@
       el.dots.appendChild(d);
     });
     el.back.disabled = ci === 0 && si === 0;
-    el.back.style.visibility = el.back.disabled ? 'hidden' : 'visible';
     var endOfChapter = si === c.steps.length - 1;
     el.next.textContent = last() ? 'Get GroundLog' : endOfChapter ? 'Next: ' + chapters[ci + 1].title : 'Next';
     if (el.watch) el.watch.href = '/academy/#' + c.clip;
