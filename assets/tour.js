@@ -72,7 +72,10 @@
     el.back.disabled = ci === 0 && si === 0;
     var endOfChapter = si === c.steps.length - 1;
     el.next.textContent = last() ? 'Get GroundLog' : endOfChapter ? 'Next: ' + chapters[ci + 1].title : 'Next';
-    if (el.watch) el.watch.href = '/academy/#' + c.clip;
+    if (el.watch) {   // 11/13: a chapter whose clip is off the site (data-clip empty) shows no "watch it" line
+      if (c.clip) el.watch.href = '/academy/#' + c.clip;
+      el.watch.parentNode.hidden = !c.clip;
+    }
     var nx = peek();
     if (nx) { var im = new Image(); im.src = nx.img; }
     var hash = '#' + c.id + '/' + (si + 1);
