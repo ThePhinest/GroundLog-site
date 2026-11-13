@@ -10,7 +10,7 @@
    "steps": [
     {
      "img": "/assets/tour/daily-log-01.webp",
-     "text": "This is one working day, morning to sign off, on a demo project. Sign in with the account you already have. There is no password to invent.",
+     "text": "This is one working day, morning to sign off, on a demo project. Sign in with the account you already have.",
      "beat": "1.1"
     },
     {
@@ -215,7 +215,7 @@
    "steps": [
     {
      "img": "/assets/tour/daily-report-01.webp",
-     "text": "End of the day. Time Out closes the timesheet, and the hours are already added up.",
+     "text": "End of the day. Time Out logs the time, and the hours are already added up.",
      "beat": "7.1"
     },
     {
